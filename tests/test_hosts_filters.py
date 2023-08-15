@@ -86,10 +86,10 @@ def test_role():
     assert fql == "product_type_desc: 'Server'"
 
 
-def test_wrong_role():
+def test_wrong_dialect():
     fql_generator = FQLGenerator(dialect='base')
     with pytest.raises(ValueError):
-        fql_generator.create_new_filter("OS", "Windows")
+        fql_generator.create_new_filter("LastSeen", "-30m")
 
 
 def test_base_in_hosts():
