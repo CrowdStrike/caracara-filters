@@ -5,7 +5,6 @@ This module contains filters that are specific to the Hosts API.
 from functools import partial
 from typing import Any, Dict
 
-from caracara_filters.common import PLATFORMS
 from caracara_filters.dialects._base import default_filter
 from caracara_filters.dialects._base import rebase_filters_on_default
 from caracara_filters.transforms import relative_timestamp_transform
@@ -129,12 +128,6 @@ hosts_local_ip_address_filter = {
     ),
 }
 
-hosts_os_filter = {
-    "fql": "platform_name",
-    "validator": partial(options_validator, PLATFORMS),
-    "help": f"Filter by host operating system (options: {str(PLATFORMS)}).",
-}
-
 hosts_os_version_filter = {
     "fql": "os_version",
     "help": (
@@ -189,7 +182,6 @@ HOSTS_FILTERS: Dict[str, Dict[str, Any]] = {
     "first_seen": hosts_first_seen_filter,  # pythonic
     "localip": hosts_local_ip_address_filter,
     "local_ip": hosts_local_ip_address_filter,  # pythonic
-    "os": hosts_os_filter,
     "osversion": hosts_os_version_filter,
     "os_version": hosts_os_version_filter,  # pythonic
     "role": hosts_role_filter,
