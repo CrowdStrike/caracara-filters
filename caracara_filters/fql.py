@@ -19,6 +19,7 @@ class FilterArgs:
     data here, we can avoid needing to re-run any transformation of validation functions at the
     time that we actually require the FQL string.
     """
+
     filter_type: str
     fql: str
     value: Any
@@ -26,6 +27,16 @@ class FilterArgs:
 
 
 class FQLGenerator:
+    """Caracara FQL Generator Class.
+
+    This class will configure itself based on the chosen dialect (base, hosts, etc.), and will
+    expose a very similar interface to its predecessor, Caracara's FalconFilter.
+
+    When a filter is created, it will be validated and its inputs values transformed before being
+    stored into the object. This means that changing a filter value once it has been stored is not
+    supported, as the transforms and validators will be bypassed.
+    """
+
     def __init__(self, dialect: str = 'base'):
         """Create a new FQL generator with a specific dialect."""
         if dialect not in DIALECTS:
@@ -191,4 +202,5 @@ class FQLGenerator:
         return '+'.join(fql_strings)
 
     def __str__(self) -> str:
+        """Return an FQL string representation of the FQLGenerator object's contents."""
         return self.get_fql()

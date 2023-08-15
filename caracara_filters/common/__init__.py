@@ -1,7 +1,8 @@
 """Caracara Filters: Common Components.
 
 This module contains functionality shared predominantly between transforms and validators, such as
-shared regular expressions."""
+shared regular expressions.
+"""
 __all__ = [
     'FILTER_OPERATORS',
     'IP_ADDRESS_RE',

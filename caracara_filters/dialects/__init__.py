@@ -1,3 +1,10 @@
+"""Caracara Filters: Dialects.
+
+FQL's dialect varies based on the API in use. For example, Spotlight and Hosts show similar
+data but with different property names and paths. Each dialect is defined here, and matched to
+a dictionary of filters by string mapping.
+"""
+
 __all__ = [
     'default_filter',
     'rebase_filters_on_default',
