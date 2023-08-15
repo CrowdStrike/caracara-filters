@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "caracara-filters"
+version = "0.1.0"
+description = "FQL generation module for Caracara"
+authors = ["Chris Hammond <chris.hammond@crowdstrike.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "caracara_filters"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+
+[tool.poetry.group.dev.dependencies]
+flake8 = "^6.1.0"
+pylint = "^2.17.5"
+pydocstyle = "^6.3.0"
+pytest = "^7.4.0"
+freezegun = "^1.2.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
