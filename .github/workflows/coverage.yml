@@ -28,5 +28,7 @@ jobs:
         cache: 'poetry'
     - name: Install dependencies
       run: poetry install
-    - name: Run pytest
-      run: poetry run pytest
+    - name: Run pytest via coverage
+      run: poetry run coverage run --source=caracara_filters -m pytest -s
+    - name: Get Coverage Report
+      run: poetry run coverage report

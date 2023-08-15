@@ -106,3 +106,58 @@ def test_multi_kv_string():
     fql_generator.create_new_filter_from_kv_string("LastSeen__GTE", "-29m")
     fql = fql_generator.get_fql()
     assert fql == "platform_name: ['Windows','Linux']+last_seen: >='2019-12-31T23:31:13Z'"
+
+
+def test_non_multivariate_list_exception():
+    fql_generator = FQLGenerator(dialect='hosts')
+    with pytest.raises(TypeError):
+        fql_generator.create_new_filter("LastSeen", ['-30m', '-60h'])
+
+
+def test_incorrect_list_type_exception():
+    fql_generator = FQLGenerator(dialect='hosts')
+    with pytest.raises(TypeError):
+        fql_generator.create_new_filter("hostname", [0, 'some host'])
+
+
+def test_validation_failure():
+    fql_generator = FQLGenerator(dialect='hosts')
+    with pytest.raises(ValueError):
+        fql_generator.create_new_filter("LastSeen", '^123')
+
+
+def test_incorrect_containment_option():
+    fql_generator = FQLGenerator(dialect='hosts')
+    with pytest.raises(ValueError):
+        fql_generator.create_new_filter("contained", "some containment option")
+
+
+def test_incorrect_relative_timestamp_format():
+    fql_generator = FQLGenerator(dialect='hosts')
+    with pytest.raises(ValueError):
+        fql_generator.create_new_filter("firstseen", "-80x")
+
+
+@freeze_time("2023-08-15 01:02:03")
+def test_last_seen_day():
+    fql_generator = FQLGenerator(dialect='hosts')
+    fql_generator.create_new_filter("firstseen", "-2d")
+    fql = fql_generator.get_fql()
+    assert fql == "first_seen: >='2023-08-13T01:02:03Z'"
+
+
+@freeze_time("2023-08-15 01:02:03")
+def test_first_seen_add_time():
+    # This is a ridiculous scenario, but we support it anyway.
+    fql_generator = FQLGenerator(dialect='hosts')
+    fql_generator.create_new_filter("firstseen", "+2d")
+    fql = fql_generator.get_fql()
+    assert fql == "first_seen: >='2023-08-17T01:02:03Z'"
+
+
+@freeze_time("2023-08-15 01:02:03")
+def test_last_seen_relative_seconds():
+    fql_generator = FQLGenerator(dialect='hosts')
+    fql_generator.create_new_filter("lastseen", "-63s")
+    fql = fql_generator.get_fql()
+    assert fql == "last_seen: >='2023-08-15T01:01:00Z'"
