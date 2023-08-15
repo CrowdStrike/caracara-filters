@@ -12,7 +12,7 @@ on:
   pull_request:
 
 jobs:
-  codequality:
+  pytest:
     strategy:
       matrix:
         python-version: ["3.7", "3.9", "3.11"]
