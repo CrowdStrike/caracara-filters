@@ -37,6 +37,6 @@ USERS_FILTERS: Dict[str, Dict[str, Any]] = {
     "first_name": users_first_name_filter,  # pythonic
     "lastname": users_last_name_filter,
     "last_name": users_last_name_filter,  # pythonic
-}  
+}
 
 rebase_filters_on_default(default_filter, USERS_FILTERS)
