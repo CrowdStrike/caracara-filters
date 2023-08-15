@@ -25,7 +25,7 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install poetry
     - name: Mint a token for PyPI
-      id: token_mint
+      id: mint-pypi-token
       shell: bash
       # This code was taken from tschm/token-mint-action
       run: |
@@ -53,7 +53,7 @@ jobs:
 
         echo "Fetching OIDC token"
         resp=$(curl -sS -H "Authorization: bearer ${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" \
-                           "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=${{ inputs.audience }}")
+                           "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=pypi")
 
         # extract the token from the response
         oidc_token=$(jq -r '.value' <<< "${resp}")
@@ -79,4 +79,4 @@ jobs:
 
     - name: Build and publish
       run: |
-        poetry publish --build -u __token__ -p '${{ steps.token_mint.outputs.api-token }}'
+        poetry publish --build -u __token__ -p '${{ steps.mint-pypi-token.outputs.api-token }}'
