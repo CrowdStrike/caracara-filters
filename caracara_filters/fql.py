@@ -55,24 +55,25 @@ class FQLGenerator:
         self.dialect: str = dialect
         self.filters: Dict[str, FilterArgs] = {}
 
-    def add_filter(self, new_filter: FilterArgs):
+    def add_filter(self, new_filter: FilterArgs) -> str:
         """Add a new filter to the FQLGenerator object."""
         filter_id = str(uuid4())
         self.filters[filter_id] = new_filter
+        return filter_id
 
     def remove_filter(self, filter_id: str):
         """Remove a filter from the current FQL Generator object by filter ID."""
         if filter_id in self.filters:
             del self.filters[filter_id]
         else:
-            raise ValueError(f"The filter with ID {filter_id} does not exist in this object.")
+            raise KeyError(f"The filter with ID {filter_id} does not exist in this object.")
 
     def create_new_filter(
         self,
         filter_name: str,
         initial_value: Any,
         initial_operator: Optional[str] = None,
-    ) -> None:
+    ) -> str:
         """Create a new FQL filter and store it, alongside its arguments, inside this object."""
         # For compatability reasons, we must send all filter names to lower case.
         filter_name = filter_name.lower()
@@ -135,7 +136,7 @@ class FQLGenerator:
             value=transformed_value,
             operator=initial_operator
         )
-        self.add_filter(filter_args)
+        return self.add_filter(filter_args)
 
     def create_new_filter_from_kv_string(self, key_string: str, value) -> str:
         """

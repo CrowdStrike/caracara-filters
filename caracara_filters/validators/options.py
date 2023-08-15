@@ -6,7 +6,7 @@ of allowable options.
 from typing import Any, List
 
 
-def options_validator(options: List[Any], chosen_option: Any) -> bool:
+def options_validator(options: List[Any], chosen_option: Any, case_sensitive: bool = True) -> bool:
     """Check if an option passed to the filter is within a pre-set list of options.
 
     If a list of choices is passed in, we bail out if any of those items are not in the list.
@@ -15,10 +15,27 @@ def options_validator(options: List[Any], chosen_option: Any) -> bool:
     Technically, we should probably test whether this item is multivariate here. However, we
     perform that check in fql.py within the FQLGenerator function.
     """
+    if case_sensitive:
+        if isinstance(chosen_option, list):
+            for chosen_option_item in chosen_option:
+                if chosen_option_item not in options:
+                    return False
+            return True
+
+        return chosen_option in options
+
+    # If we got this far, case sensitivity is off
     if isinstance(chosen_option, list):
         for chosen_option_item in chosen_option:
-            if chosen_option_item not in options:
-                return False
+            if isinstance(chosen_option_item, str):
+                if chosen_option_item.lower() not in options:
+                    return False
+            else:
+                if chosen_option_item not in options:
+                    return False
         return True
 
-    return chosen_option in options
+    if isinstance(chosen_option, str):
+        return chosen_option.lower() in options
+    else:
+        return chosen_option in options
