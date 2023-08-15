@@ -7,4 +7,5 @@ from typing import Any
 
 
 def identity_transform(value: Any) -> Any:
+    """Return back the same value, as no transform is required."""
     return value

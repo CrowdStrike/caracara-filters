@@ -6,4 +6,5 @@ from typing import Any
 
 
 def identity_validator(_: Any) -> bool:
+    """Return True if no input validation (aside from type) is required."""
     return True
