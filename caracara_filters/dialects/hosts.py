@@ -5,7 +5,6 @@ This module contains filters that are specific to the Hosts API.
 from functools import partial
 from typing import Any, Dict
 
-from caracara_filters.common import PLATFORMS
 from caracara_filters.dialects._base import default_filter
 from caracara_filters.dialects._base import rebase_filters_on_default
 from caracara_filters.transforms import relative_timestamp_transform
@@ -37,7 +36,7 @@ def user_readable_string_transform(map_dict: Dict[str, str], input_str: str) -> 
     raise ValueError("An invalid filter input was provided.")
 
 
-host_contained_filter = {
+hosts_contained_filter = {
     "fql": "status",
     "help": "Filter by a host's network containment status.",
     "multivariate": False,
@@ -48,7 +47,7 @@ host_contained_filter = {
     ]),
 }
 
-host_domain_filter = {
+hosts_domain_filter = {
     "fql": "machine_domain",
     "help": (
         "This filter accepts an AD domain, e.g. GOODDOMAIN or gooddomain.company.com. You can "
@@ -56,7 +55,7 @@ host_domain_filter = {
     ),
 }
 
-host_group_id_filter = {
+hosts_group_id_filter = {
     "fql": "groups",
     "help": (
         "This filter accepts one or more Group IDs as either one string, or as a comma "
@@ -66,7 +65,7 @@ host_group_id_filter = {
     ),
 }
 
-host_hostname_filter = {
+hosts_hostname_filter = {
     "fql": "hostname",
     "help": (
         "Provide either a single hostname string, or a list of hostnames via a comma delimited "
@@ -75,7 +74,7 @@ host_hostname_filter = {
     ),
 }
 
-host_last_seen_filter = {
+hosts_last_seen_filter = {
     "fql": "last_seen",
     "multivariate": False,
     "operator": "GTE",
@@ -97,7 +96,7 @@ host_last_seen_filter = {
     ),
 }
 
-host_first_seen_filter = {
+hosts_first_seen_filter = {
     "fql": "first_seen",
     "multivariate": False,
     "operator": "GTE",
@@ -119,7 +118,7 @@ host_first_seen_filter = {
     ),
 }
 
-host_local_ip_address_filter = {
+hosts_local_ip_address_filter = {
     "fql": "local_ip",
     "help": (
         "This filter accepts an IP address string associated with a network card, e.g. "
@@ -129,13 +128,7 @@ host_local_ip_address_filter = {
     ),
 }
 
-host_os_filter = {
-    "fql": "platform_name",
-    "validator": partial(options_validator, PLATFORMS),
-    "help": f"Filter by host operating system (options: {str(PLATFORMS)}).",
-}
-
-host_os_version_filter = {
+hosts_os_version_filter = {
     "fql": "os_version",
     "help": (
         "This filter accepts a name of an operating system version and can be supplied many "
@@ -143,14 +136,14 @@ host_os_version_filter = {
     ),
 }
 
-host_role_filter = {
+hosts_role_filter = {
     "fql": "product_type_desc",
     "transform": partial(user_readable_string_transform, _role_map),
     "validator": partial(options_validator, [*_role_map.keys(), *_role_map.values()]),
     "help": "Filter by system role (i.e., DC, Server, Workstation).",
 }
 
-host_site_filter = {
+hosts_site_filter = {
     "fql": "site_name",
     "help": (
         "This filter accepts one or more site names as either one string, or as a comma delimtied "
@@ -159,7 +152,7 @@ host_site_filter = {
     ),
 }
 
-host_tag_filter = {
+hosts_tag_filter = {
     "fql": "tags",
     "help": (
         "This filter accepts one or more sensor tags as either one string, or as a comma "
@@ -168,7 +161,7 @@ host_tag_filter = {
     ),
 }
 
-host_ou_filter = {
+hosts_ou_filter = {
     "fql": "ou",
     "help": (
         "This filter accepts an Organisational Unit (OU) name as a string. You can also comma "
@@ -177,19 +170,23 @@ host_ou_filter = {
     ),
 }
 
-HOST_FILTERS: Dict[str, Dict[str, Any]] = {
-    "contained": host_contained_filter,
-    "domain": host_domain_filter,
-    "groupid": host_group_id_filter,
-    "hostname": host_hostname_filter,
-    "lastseen": host_last_seen_filter,
-    "firstseen": host_first_seen_filter,
-    "localip": host_local_ip_address_filter,
-    "os": host_os_filter,
-    "osversion": host_os_version_filter,
-    "role": host_role_filter,
-    "site": host_site_filter,
-    "tag": host_tag_filter,
+HOSTS_FILTERS: Dict[str, Dict[str, Any]] = {
+    "contained": hosts_contained_filter,
+    "domain": hosts_domain_filter,
+    "groupid": hosts_group_id_filter,
+    "group_id": hosts_group_id_filter,  # pythonic
+    "hostname": hosts_hostname_filter,
+    "lastseen": hosts_last_seen_filter,
+    "last_seen": hosts_last_seen_filter,  # pythonic
+    "firstseen": hosts_first_seen_filter,
+    "first_seen": hosts_first_seen_filter,  # pythonic
+    "localip": hosts_local_ip_address_filter,
+    "local_ip": hosts_local_ip_address_filter,  # pythonic
+    "osversion": hosts_os_version_filter,
+    "os_version": hosts_os_version_filter,  # pythonic
+    "role": hosts_role_filter,
+    "site": hosts_site_filter,
+    "tag": hosts_tag_filter,
 }
 
-rebase_filters_on_default(default_filter, HOST_FILTERS)
+rebase_filters_on_default(default_filter, HOSTS_FILTERS)
