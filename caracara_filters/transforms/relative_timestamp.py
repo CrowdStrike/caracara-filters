@@ -10,11 +10,8 @@ Examples:
 -2d  = take 2 days away from the current time
 +4d  = add 4 days to the current time
 """
-import re
-
 from datetime import datetime
 from datetime import timedelta
-from typing import Optional
 
 from caracara_filters.common import RELATIVE_TIMESTAMP_RE
 
@@ -24,7 +21,9 @@ def convert_relative_timestamp(
     relative_timestamp: str
 ) -> datetime:
     """Convert a relative timestamp into an absolute ISO8601 timestamp."""
-    match: Optional[re.Match[str]] = RELATIVE_TIMESTAMP_RE.match(relative_timestamp)
+    # Type of the below is Optional[re.Match[str]]; however, re.Match cannot be subscripted
+    # on Python 3.7
+    match = RELATIVE_TIMESTAMP_RE.match(relative_timestamp)
     if match is None:
         # This should be impossible, as we have the check function
         # above to make sure this ridiculous situation doesn't happen
