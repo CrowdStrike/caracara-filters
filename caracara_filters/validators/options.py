@@ -14,28 +14,41 @@ def options_validator(options: List[Any], chosen_option: Any, case_sensitive: bo
 
     Technically, we should probably test whether this item is multivariate here. However, we
     perform that check in fql.py within the FQLGenerator function.
+
+    Scenarios to cover here:
+    - Case sensitive and a list of strings
+    - Case sensitive and a list of non-strings
+    - Case sensitive and a string
+    - Non-case sensitive and a list of strings
+    - Non-case sensitive and a list of non-strings
+    - Non-case sensitive and a string
     """
-    if case_sensitive:
-        if isinstance(chosen_option, list):
-            for chosen_option_item in chosen_option:
-                if chosen_option_item not in options:
-                    return False
-            return True
+    if isinstance(chosen_option, str):
+        return chosen_option in options if case_sensitive \
+            else chosen_option.lower() in options
 
-        return chosen_option in options
-
-    # If we got this far, case sensitivity is off
     if isinstance(chosen_option, list):
         for chosen_option_item in chosen_option:
-            if isinstance(chosen_option_item, str):
-                if chosen_option_item.lower() not in options:
-                    return False
-            else:
-                if chosen_option_item not in options:
-                    return False
+            if (
+                isinstance(chosen_option_item, str) and
+                case_sensitive and
+                chosen_option_item not in options
+            ):
+                return False
+
+            if (
+                isinstance(chosen_option_item, str) and
+                not case_sensitive and
+                chosen_option_item.lower() not in options
+            ):
+                return False
+
+            if (
+                not isinstance(chosen_option_item, str) and
+                chosen_option_item not in options
+            ):
+                return False
+
         return True
 
-    if isinstance(chosen_option, str):
-        return chosen_option.lower() in options
-    else:
-        return chosen_option in options
+    return chosen_option in options
