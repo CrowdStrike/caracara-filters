@@ -47,11 +47,38 @@ hosts_contained_filter = {
     ]),
 }
 
+hosts_device_id_filter = {
+    "fql": "device_id",
+    "help": "Filter by device ID (AID).",
+}
+
 hosts_domain_filter = {
     "fql": "machine_domain",
     "help": (
         "This filter accepts an AD domain, e.g. GOODDOMAIN or gooddomain.company.com. You can "
         "also provide multiple domains as a Python list or comma delimited string"
+    ),
+}
+
+hosts_first_seen_filter = {
+    "fql": "first_seen",
+    "multivariate": False,
+    "operator": "GTE",
+    "valid_operators": [
+        "EQUAL",
+        "GT",
+        "GTE",
+        "LT",
+        "LTE",
+    ],
+    "transform": relative_timestamp_transform,
+    "validator": relative_timestamp_validator,
+    "help": (
+        "This filter accepts two types of parameter: a fixed ISO 8601 timestamp (such as "
+        "2020-01-01:01:00:00Z), or a relative timestamp such as -30m. -30m means time now, "
+        "minus thirty minutes, so is best combined with an operator such as GTE. One example is "
+        "FirstSeen__GTE=-1d, to filter for all new hosts that have been added to Falcon within "
+        "the past 1 day."
     ),
 }
 
@@ -96,28 +123,6 @@ hosts_last_seen_filter = {
     ),
 }
 
-hosts_first_seen_filter = {
-    "fql": "first_seen",
-    "multivariate": False,
-    "operator": "GTE",
-    "valid_operators": [
-        "EQUAL",
-        "GT",
-        "GTE",
-        "LT",
-        "LTE",
-    ],
-    "transform": relative_timestamp_transform,
-    "validator": relative_timestamp_validator,
-    "help": (
-        "This filter accepts two types of parameter: a fixed ISO 8601 timestamp (such as "
-        "2020-01-01:01:00:00Z), or a relative timestamp such as -30m. -30m means time now, "
-        "minus thirty minutes, so is best combined with an operator such as GTE. One example is "
-        "FirstSeen__GTE=-1d, to filter for all new hosts that have been added to Falcon within "
-        "the past 1 day."
-    ),
-}
-
 hosts_local_ip_address_filter = {
     "fql": "local_ip",
     "help": (
@@ -125,6 +130,14 @@ hosts_local_ip_address_filter = {
         "172.16.1.2 or 172.16.* to cover the /16 range. You can also comma delimit strings "
         "for multiple matches, e.g., 172.16.1.2,172.16.1.3 to target hosts with each of those "
         "IPs, or provide a Python list of IP strings."
+    ),
+}
+
+hosts_mac_address_filter = {
+    "fql": "mac_address",
+    "help": (
+        "This filter accepts a MAC address string associated with a network interface, e.g., "
+        "01-22-33-44-55-66"
     ),
 }
 
@@ -172,16 +185,20 @@ hosts_ou_filter = {
 
 HOSTS_FILTERS: Dict[str, Dict[str, Any]] = {
     "contained": hosts_contained_filter,
+    "deviceid": hosts_device_id_filter,
+    "device_id": hosts_device_id_filter,  # pythonic
     "domain": hosts_domain_filter,
+    "firstseen": hosts_first_seen_filter,
+    "first_seen": hosts_first_seen_filter,  # pythonic
     "groupid": hosts_group_id_filter,
     "group_id": hosts_group_id_filter,  # pythonic
     "hostname": hosts_hostname_filter,
     "lastseen": hosts_last_seen_filter,
     "last_seen": hosts_last_seen_filter,  # pythonic
-    "firstseen": hosts_first_seen_filter,
-    "first_seen": hosts_first_seen_filter,  # pythonic
     "localip": hosts_local_ip_address_filter,
     "local_ip": hosts_local_ip_address_filter,  # pythonic
+    "macaddress": hosts_mac_address_filter,
+    "mac_address": hosts_mac_address_filter,  # pythonic
     "osversion": hosts_os_version_filter,
     "os_version": hosts_os_version_filter,  # pythonic
     "role": hosts_role_filter,
