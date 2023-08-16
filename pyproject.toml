@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "caracara-filters"
-version = "0.1.2"
+version = "0.1.3"
 description = "FQL generation engine for Caracara"
 authors = ["Chris Hammond <chris.hammond@crowdstrike.com>"]
 license = "MIT"
