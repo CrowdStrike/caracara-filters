@@ -118,7 +118,6 @@ class FQLGenerator:
 
         # Run through the validation function
         validation_func: Callable[[Any], bool] = new_filter_type['validator']
-        print(validation_func)
         if not validation_func(initial_value):
             raise ValueError(
                 f"The input {initial_value} is not valid for filter type {filter_name}."
