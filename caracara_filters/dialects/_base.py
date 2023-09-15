@@ -16,6 +16,7 @@ default_filter = {
     "data_type": str,
     "operator": "EQUAL",
     "multivariate": True,
+    "nullable": False,
     "transform": identity_transform,
     "validator": identity_validator,
     "valid_operators": ['EQUAL'],
