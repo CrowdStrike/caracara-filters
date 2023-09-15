@@ -4,7 +4,7 @@ This file contains a class that can be instantiated to contain filters. It must 
 a dialect, after which filters can be added.
 """
 from dataclasses import dataclass
-from typing import Any, Callable, Dict, List, Type, Optional
+from typing import Any, Callable, Dict, List, Type, Optional, Union
 from uuid import uuid4
 
 from caracara_filters.common import FILTER_OPERATORS
@@ -20,7 +20,7 @@ class FilterArgs:
     time that we actually require the FQL string.
     """
 
-    filter_type: str
+    filter_def: str
     fql: str
     value: Any
     operator: str
@@ -55,6 +55,83 @@ class FQLGenerator:
         self.dialect: str = dialect
         self.filters: Dict[str, FilterArgs] = {}
 
+    def _validate_input_type(
+        self,
+        filter_name: str,
+        filter_def: Dict[str, Any],
+        value: Any,
+    ) -> None:
+        """Validate the data type of a filter's input, based on the filter definition."""
+        data_type: Type = filter_def['data_type']
+        multivariate: bool = filter_def['multivariate']
+        nullable: bool = filter_def['nullable']
+
+        if isinstance(value, list):
+            if (
+                multivariate is True and
+                value and
+                not isinstance(value[0], data_type)
+            ):
+                raise TypeError(
+                    f"You provided a list for {filter_name}, but the type of the first item was "
+                    f"{str(type(value))}, which is not a {str(type(data_type))}."
+                )
+            if multivariate is False:
+                raise TypeError(
+                    f"The filter {filter_name} is not multivariate, but you provided a list."
+                )
+        elif value is None and not nullable:
+            raise TypeError(
+                f"The filter {filter_name} is not nullable, but you provided a NoneType."
+            )
+        elif value is None and nullable:
+            # This is okay
+            pass
+        else:
+            if not isinstance(value, data_type):
+                raise TypeError(
+                    f"The filter {filter_name} expects a {data_type.__name__} type, but you "
+                    f"provided an initial value of type {str(type(value))}."
+                )
+
+    def _validate_and_transform(
+            self,
+            filter_name: str,
+            filter_def: Dict[str, Any],
+            value: Any,
+    ) -> Union[List[Any], str]:
+        """Take an input from a developer or user and return a valid filter value."""
+        multivariate: bool = filter_def['multivariate']
+        transform_func: Callable[[Any], Any] = filter_def['transform']
+        validation_func: Callable[[Any], bool] = filter_def['validator']
+
+        # Handle multivariate options by validating and transforming each option individually
+        if multivariate and isinstance(value, list):
+            transformed_value = []
+            for val in value:
+                # Validate the input
+                if not validation_func(val):
+                    raise ValueError(f"The input {val} is not valid for filter type {filter}.")
+
+                # Transform the input
+                transformed_val = transform_func(val)
+
+                # Replace the value in the list
+                transformed_value.append(transformed_val)
+
+        else:
+            # Non-multivariate input, so just handle the items directly
+            # Run through the validation function
+            if not validation_func(value):
+                raise ValueError(
+                    f"The input {value} is not valid for filter type {filter_name}."
+                )
+
+            # Transform the input
+            transformed_value = transform_func(value)
+
+        return transformed_value
+
     def add_filter(self, new_filter: FilterArgs) -> str:
         """Add a new filter to the FQLGenerator object."""
         filter_id = str(uuid4())
@@ -80,57 +157,41 @@ class FQLGenerator:
         if filter_name not in self.available_filters:
             raise ValueError(f"The specified filter name {filter_name} does not exist.")
 
-        new_filter_type: Dict[str, Any] = self.available_filters[filter_name]
+        new_filter_def: Dict[str, Any] = self.available_filters[filter_name]
 
         # Perform simple validations before we execute a validation function
-        valid_operators: List[str] = new_filter_type['valid_operators']
-        multivariate: bool = new_filter_type['multivariate']
-        data_type: Type = new_filter_type['data_type']
+        valid_operators: List[str] = new_filter_def['valid_operators']
+        nullable: bool = new_filter_def['nullable']
 
         if initial_operator is None:
-            initial_operator = new_filter_type['operator']
+            initial_operator = new_filter_def['operator']
         elif initial_operator not in valid_operators:
             raise ValueError(
                 f"The provided initial operator, {initial_operator}, is not valid. Valid "
                 f"options for a {filter_name} filter: {str(valid_operators)}"
             )
 
-        if isinstance(initial_value, list):
-            if (
-                multivariate is True and
-                initial_value and
-                not isinstance(initial_value[0], data_type)
-            ):
-                raise TypeError(
-                    f"You provided a list for {filter_name}, but the type of the first item was "
-                    f"{str(type(initial_value))}, which is not a {str(type(data_type))}."
-                )
-            if multivariate is False:
-                raise TypeError(
-                    f"The filter {filter_name} is not multivariate, but you provided a list."
-                )
-        else:
-            if not isinstance(initial_value, data_type):
-                raise TypeError(
-                    f"The filter {filter_name} expects a {str(type(data_type))} type, but you "
-                    f"provided an initial value of type {str(type(initial_value))}."
-                )
+        # Ensure the initial value provided is of the right data type
+        self._validate_input_type(
+            filter_name=filter_name,
+            filter_def=new_filter_def,
+            value=initial_value,
+        )
 
-        # Run through the validation function
-        validation_func: Callable[[Any], bool] = new_filter_type['validator']
-        if not validation_func(initial_value):
-            raise ValueError(
-                f"The input {initial_value} is not valid for filter type {filter_name}."
+        # If the input is None, and we're nullable, we can just skip the rest
+        if nullable and initial_value is None:
+            transformed_value = None
+        else:
+            transformed_value = self._validate_and_transform(
+                filter_name=filter_name,
+                filter_def=new_filter_def,
+                value=initial_value,
             )
 
-        # Transform the input
-        transform_func: Callable[[Any], Any] = new_filter_type['transform']
-        transformed_value = transform_func(initial_value)
-
-        fql = new_filter_type['fql']
+        fql = new_filter_def['fql']
 
         filter_args = FilterArgs(
-            filter_type=filter_name,
+            filter_def=filter_name,
             fql=fql,
             value=transformed_value,
             operator=initial_operator
@@ -173,11 +234,6 @@ class FQLGenerator:
         for filter_args in self.filters.values():
             operator_symbol = FILTER_OPERATORS[filter_args.operator]
 
-            # Handle empty values with a null, then loop back round and ignore the rest of the logic
-            if filter_args.value is None:
-                fql_strings.append(f'{filter_args.fql}:{operator_symbol}null')
-                continue
-
             if (
                 isinstance(filter_args.value, list) and
                 filter_args.value and
@@ -193,6 +249,8 @@ class FQLGenerator:
                     fql_value = f"'{filter_args.value}'"
             elif isinstance(filter_args.value, bool):
                 fql_value = str(filter_args.value).lower()
+            elif filter_args.value is None:
+                fql_value = 'null'
             else:
                 fql_value = str(filter_args.value)
 

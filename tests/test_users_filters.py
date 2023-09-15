@@ -1,7 +1,9 @@
+"""Test users dialect filters."""
 from caracara_filters import FQLGenerator
 
 
 def test_users_assigned_cids():
+    """Test filtering for users bby multiple possible assigned CIDs."""
     fql_generator = FQLGenerator(dialect='users')
     fql_generator.create_new_filter("assignedcids", ["abcdefg", "123456"])
     fql = fql_generator.get_fql()
@@ -9,6 +11,7 @@ def test_users_assigned_cids():
 
 
 def test_users_home_cid():
+    """Test filtering for users based on options for their home CIDs."""
     fql_generator = FQLGenerator(dialect='users')
     fql_generator.create_new_filter("cid", ["abcdefg", "123456"])
     fql = fql_generator.get_fql()
@@ -16,6 +19,7 @@ def test_users_home_cid():
 
 
 def test_users_first_name():
+    """Test filtering for users by first name."""
     fql_generator = FQLGenerator(dialect='users')
     fql_generator.create_new_filter("firstname", "test")
     fql = fql_generator.get_fql()
@@ -23,6 +27,7 @@ def test_users_first_name():
 
 
 def test_users_last_name():
+    """Test filtering for users by last name."""
     fql_generator = FQLGenerator(dialect='users')
     fql_generator.create_new_filter("last_name", "Smith")
     fql = fql_generator.get_fql()
@@ -30,6 +35,7 @@ def test_users_last_name():
 
 
 def test_users_name():
+    """Test filtering for users by full name."""
     fql_generator = FQLGenerator(dialect='users')
     fql_generator.create_new_filter("name", "John Smith")
     fql = fql_generator.get_fql()

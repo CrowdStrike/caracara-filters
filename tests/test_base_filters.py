@@ -1,3 +1,4 @@
+"""Test the base filters that are inherited by every dialect."""
 from caracara_filters import FQLGenerator
 
 

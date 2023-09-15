@@ -39,7 +39,6 @@ def user_readable_string_transform(map_dict: Dict[str, str], input_str: str) -> 
 hosts_contained_filter = {
     "fql": "status",
     "help": "Filter by a host's network containment status.",
-    "multivariate": False,
     "transform": partial(user_readable_string_transform, _containment_value_map),
     "validator": partial(options_validator, [
         *_containment_value_map.keys(),
@@ -94,6 +93,7 @@ hosts_group_id_filter = {
 
 hosts_hostname_filter = {
     "fql": "hostname",
+    "nullable": True,
     "help": (
         "Provide either a single hostname string, or a list of hostnames via a comma delimited "
         "string or Python list. For example, you can omit two specific hosts with "
