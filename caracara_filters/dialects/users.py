@@ -2,11 +2,10 @@
 
 This module contains filters that are specific to the User Management API.
 """
+
 from typing import Any, Dict
 
-from caracara_filters.dialects._base import default_filter
-from caracara_filters.dialects._base import rebase_filters_on_default
-
+from caracara_filters.dialects._base import default_filter, rebase_filters_on_default
 
 users_assigned_cids_filter = {
     "fql": "assigned_cids",
