@@ -2,9 +2,8 @@
 
 This module contains a new implementation of an FQL generator designed to plug in to Caracara.
 """
-
 __all__ = [
-    "FQLGenerator",
+    'FQLGenerator',
 ]
 
 from caracara_filters.fql import FQLGenerator

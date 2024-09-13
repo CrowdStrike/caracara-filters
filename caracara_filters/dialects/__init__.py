@@ -6,17 +6,18 @@ a dictionary of filters by string mapping.
 """
 
 __all__ = [
-    "DIALECTS",
-    "HOSTS_FILTERS",
-    "PREVENTION_POLICIES_FILTERS",
-    "RESPONSE_POLICIES_FILTERS",
-    "RTR_FILTERS",
-    "USERS_FILTERS",
-    "default_filter",
-    "rebase_filters_on_default",
+    'DIALECTS',
+    'HOSTS_FILTERS',
+    'PREVENTION_POLICIES_FILTERS',
+    'RESPONSE_POLICIES_FILTERS',
+    'RTR_FILTERS',
+    'USERS_FILTERS',
+    'default_filter',
+    'rebase_filters_on_default',
 ]
 
-from caracara_filters.dialects._base import BASE_FILTERS, default_filter
+from caracara_filters.dialects._base import BASE_FILTERS
+from caracara_filters.dialects._base import default_filter
 from caracara_filters.dialects._merge import rebase_filters_on_default
 from caracara_filters.dialects.hosts import HOSTS_FILTERS
 from caracara_filters.dialects.prevention_policies import PREVENTION_POLICIES_FILTERS

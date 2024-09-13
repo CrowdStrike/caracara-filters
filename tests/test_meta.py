@@ -1,5 +1,4 @@
 """Tests that can cover the way that the filtering logic works outside of individual dialects."""
-
 import pytest
 
 from caracara_filters import FQLGenerator
@@ -8,12 +7,12 @@ from caracara_filters import FQLGenerator
 def test_non_existent_dialect():
     """Test an attempt to load a dialect that doesn't exist."""
     with pytest.raises(ValueError):
-        FQLGenerator(dialect="not a module")
+        FQLGenerator(dialect='not a module')
 
 
 def test_filter_delete_real_id():
     """Test attempting to delete a filter from an FQLGenerator object."""
-    fql_generator = FQLGenerator(dialect="base")
+    fql_generator = FQLGenerator(dialect='base')
     filter_id = fql_generator.create_new_filter("name", "testtest")
     fql = fql_generator.get_fql()
     assert fql == "name: 'testtest'"
@@ -31,7 +30,7 @@ def test_filter_delete_bad_id():
 
 def test_bad_data_type():
     """Test trying to load a base filter with a bad datatype."""
-    fql_generator = FQLGenerator(dialect="base")
+    fql_generator = FQLGenerator(dialect='base')
     with pytest.raises(TypeError):
         fql_generator.create_new_filter("name", 123)
 
@@ -49,7 +48,7 @@ def test_bool_filter():
 
 def test_str_dunder():
     """Test that the __str__ function in the FQLGenerator class works."""
-    fql_generator = FQLGenerator(dialect="base")
+    fql_generator = FQLGenerator(dialect='base')
     fql_generator.create_new_filter("name", "testname")
     fql = fql_generator.get_fql()
     assert fql == str(fql_generator)
