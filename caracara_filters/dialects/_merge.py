@@ -3,12 +3,12 @@
 This code file will merge the filter dictionaries using mergedeep
 so that a resultant filter can exist.
 """
+
 from typing import Any, Dict
 
 
 def rebase_filters_on_default(
-    default_filter: Dict[str, Any],
-    filters: Dict[str, Dict[str, Any]]
+    default_filter: Dict[str, Any], filters: Dict[str, Dict[str, Any]]
 ) -> None:
     """Rebase every filter on a default base filter.
 

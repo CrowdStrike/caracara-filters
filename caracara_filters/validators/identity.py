@@ -2,6 +2,7 @@
 
 This is a simple validator that always returns True.
 """
+
 from typing import Any
 
 

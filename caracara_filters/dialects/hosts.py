@@ -2,15 +2,13 @@
 
 This module contains filters that are specific to the Hosts API.
 """
+
 from functools import partial
 from typing import Any, Dict
 
-from caracara_filters.dialects._base import default_filter
-from caracara_filters.dialects._base import rebase_filters_on_default
+from caracara_filters.dialects._base import default_filter, rebase_filters_on_default
 from caracara_filters.transforms import relative_timestamp_transform
-from caracara_filters.validators import options_validator
-from caracara_filters.validators import relative_timestamp_validator
-
+from caracara_filters.validators import options_validator, relative_timestamp_validator
 
 _containment_value_map = {
     "Contained": "contained",
@@ -40,10 +38,13 @@ hosts_contained_filter = {
     "fql": "status",
     "help": "Filter by a host's network containment status.",
     "transform": partial(user_readable_string_transform, _containment_value_map),
-    "validator": partial(options_validator, [
-        *_containment_value_map.keys(),
-        *_containment_value_map.values(),
-    ]),
+    "validator": partial(
+        options_validator,
+        [
+            *_containment_value_map.keys(),
+            *_containment_value_map.values(),
+        ],
+    ),
 }
 
 hosts_device_id_filter = {
@@ -56,6 +57,16 @@ hosts_domain_filter = {
     "help": (
         "This filter accepts an AD domain, e.g. GOODDOMAIN or gooddomain.company.com. You can "
         "also provide multiple domains as a Python list or comma delimited string"
+    ),
+}
+
+hosts_external_ip_address_filter = {
+    "fql": "external_ip",
+    "help": (
+        "This filter accepts an IP address string associated with a remote network, e.g. "
+        "123.234.123.234, or 123.234.0.0/16 to cover the /16 range. You can also comma delimit "
+        "strings for multiple matches, e.g., 123.234.123.234,100.200.100.200 to target hosts with "
+        "each of those IP addresses, or provide a Python list of IP address strings."
     ),
 }
 
@@ -127,9 +138,9 @@ hosts_local_ip_address_filter = {
     "fql": "local_ip",
     "help": (
         "This filter accepts an IP address string associated with a network card, e.g. "
-        "172.16.1.2 or 172.16.* to cover the /16 range. You can also comma delimit strings "
+        "172.16.1.2 or 172.16.0.0/16 to cover the /16 range. You can also comma delimit strings "
         "for multiple matches, e.g., 172.16.1.2,172.16.1.3 to target hosts with each of those "
-        "IPs, or provide a Python list of IP strings."
+        "IP addresses, or provide a Python list of IP address strings."
     ),
 }
 
@@ -148,6 +159,7 @@ hosts_os_version_filter = {
         "times. For example, Windows 7, RHEL 7.9, Catalina (10.15), etc."
     ),
 }
+
 
 hosts_role_filter = {
     "fql": "product_type_desc",
@@ -188,6 +200,8 @@ HOSTS_FILTERS: Dict[str, Dict[str, Any]] = {
     "deviceid": hosts_device_id_filter,
     "device_id": hosts_device_id_filter,  # pythonic
     "domain": hosts_domain_filter,
+    "external": hosts_external_ip_address_filter,
+    "external_ip": hosts_external_ip_address_filter,  # pythonic
     "firstseen": hosts_first_seen_filter,
     "first_seen": hosts_first_seen_filter,  # pythonic
     "groupid": hosts_group_id_filter,
