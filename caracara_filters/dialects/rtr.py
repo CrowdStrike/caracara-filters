@@ -2,13 +2,12 @@
 
 This module contains filters that are specific to the RTR API.
 """
+
 from functools import partial
 from typing import Any, Dict
 
-from caracara_filters.dialects._base import default_filter
-from caracara_filters.dialects._base import rebase_filters_on_default
+from caracara_filters.dialects._base import default_filter, rebase_filters_on_default
 from caracara_filters.validators import options_validator
-
 
 RTR_COMMANDS = [
     "cat",

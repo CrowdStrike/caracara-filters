@@ -3,8 +3,9 @@
 This file contains a class that can be instantiated to contain filters. It must be configured with
 a dialect, after which filters can be added.
 """
+
 from dataclasses import dataclass
-from typing import Any, Callable, Dict, List, Type, Optional, Union
+from typing import Any, Callable, Dict, List, Optional, Type, Union
 from uuid import uuid4
 
 from caracara_filters.common import FILTER_OPERATORS
@@ -37,18 +38,18 @@ class FQLGenerator:
     supported, as the transforms and validators will be bypassed.
     """
 
-    def __init__(self, dialect: str = 'base'):
+    def __init__(self, dialect: str = "base"):
         """Create a new FQL generator with a specific dialect."""
         if dialect not in DIALECTS:
             raise ValueError(
                 f"The specified dialect does not exist. Valid choices are: {str(DIALECTS.keys())}."
             )
 
-        if dialect == 'base':
-            self.available_filters: Dict[str, Dict[str, Any]] = DIALECTS['base']
+        if dialect == "base":
+            self.available_filters: Dict[str, Dict[str, Any]] = DIALECTS["base"]
         else:
             self.available_filters: Dict[str, Dict[str, Any]] = {
-                **DIALECTS['base'],
+                **DIALECTS["base"],
                 **DIALECTS[dialect],
             }
 
@@ -62,16 +63,12 @@ class FQLGenerator:
         value: Any,
     ) -> None:
         """Validate the data type of a filter's input, based on the filter definition."""
-        data_type: Type = filter_def['data_type']
-        multivariate: bool = filter_def['multivariate']
-        nullable: bool = filter_def['nullable']
+        data_type: Type = filter_def["data_type"]
+        multivariate: bool = filter_def["multivariate"]
+        nullable: bool = filter_def["nullable"]
 
         if isinstance(value, list):
-            if (
-                multivariate is True and
-                value and
-                not isinstance(value[0], data_type)
-            ):
+            if multivariate is True and value and not isinstance(value[0], data_type):
                 raise TypeError(
                     f"You provided a list for {filter_name}, but the type of the first item was "
                     f"{str(type(value))}, which is not a {str(type(data_type))}."
@@ -95,15 +92,15 @@ class FQLGenerator:
                 )
 
     def _validate_and_transform(
-            self,
-            filter_name: str,
-            filter_def: Dict[str, Any],
-            value: Any,
+        self,
+        filter_name: str,
+        filter_def: Dict[str, Any],
+        value: Any,
     ) -> Union[List[Any], str]:
         """Take an input from a developer or user and return a valid filter value."""
-        multivariate: bool = filter_def['multivariate']
-        transform_func: Callable[[Any], Any] = filter_def['transform']
-        validation_func: Callable[[Any], bool] = filter_def['validator']
+        multivariate: bool = filter_def["multivariate"]
+        transform_func: Callable[[Any], Any] = filter_def["transform"]
+        validation_func: Callable[[Any], bool] = filter_def["validator"]
 
         # Handle multivariate options by validating and transforming each option individually
         if multivariate and isinstance(value, list):
@@ -123,9 +120,7 @@ class FQLGenerator:
             # Non-multivariate input, so just handle the items directly
             # Run through the validation function
             if not validation_func(value):
-                raise ValueError(
-                    f"The input {value} is not valid for filter type {filter_name}."
-                )
+                raise ValueError(f"The input {value} is not valid for filter type {filter_name}.")
 
             # Transform the input
             transformed_value = transform_func(value)
@@ -160,11 +155,11 @@ class FQLGenerator:
         new_filter_def: Dict[str, Any] = self.available_filters[filter_name]
 
         # Perform simple validations before we execute a validation function
-        valid_operators: List[str] = new_filter_def['valid_operators']
-        nullable: bool = new_filter_def['nullable']
+        valid_operators: List[str] = new_filter_def["valid_operators"]
+        nullable: bool = new_filter_def["nullable"]
 
         if initial_operator is None:
-            initial_operator = new_filter_def['operator']
+            initial_operator = new_filter_def["operator"]
         elif initial_operator not in valid_operators:
             raise ValueError(
                 f"The provided initial operator, {initial_operator}, is not valid. Valid "
@@ -188,13 +183,10 @@ class FQLGenerator:
                 value=initial_value,
             )
 
-        fql = new_filter_def['fql']
+        fql = new_filter_def["fql"]
 
         filter_args = FilterArgs(
-            filter_def=filter_name,
-            fql=fql,
-            value=transformed_value,
-            operator=initial_operator
+            filter_def=filter_name, fql=fql, value=transformed_value, operator=initial_operator
         )
         return self.add_filter(filter_args)
 
@@ -213,20 +205,15 @@ class FQLGenerator:
             operator = None  # None operator results in the default
 
         if isinstance(value, str):
-            if ',' in value:
-                value = value.split(',')
+            if "," in value:
+                value = value.split(",")
 
         if operator:
             return self.create_new_filter(
-                filter_name=filter_name,
-                initial_value=value,
-                initial_operator=operator
+                filter_name=filter_name, initial_value=value, initial_operator=operator
             )
 
-        return self.create_new_filter(
-            filter_name=filter_name,
-            initial_value=value
-        )
+        return self.create_new_filter(filter_name=filter_name, initial_value=value)
 
     def get_fql(self) -> str:
         """Return a valid FQL string based on the filters within this object."""
@@ -235,29 +222,29 @@ class FQLGenerator:
             operator_symbol = FILTER_OPERATORS[filter_args.operator]
 
             if (
-                isinstance(filter_args.value, list) and
-                filter_args.value and
-                isinstance(filter_args.value[0], str)
+                isinstance(filter_args.value, list)
+                and filter_args.value
+                and isinstance(filter_args.value[0], str)
             ):
                 fql_value = "['" + "','".join(filter_args.value) + "']"
             elif isinstance(filter_args.value, list):
-                fql_value = '[' + ','.join(filter_args.value) + ']'
+                fql_value = "[" + ",".join(filter_args.value) + "]"
             elif isinstance(filter_args.value, str):
-                if filter_args.value.lower() in ['true', 'false']:
+                if filter_args.value.lower() in ["true", "false"]:
                     fql_value = filter_args.value.lower()
                 else:
                     fql_value = f"'{filter_args.value}'"
             elif isinstance(filter_args.value, bool):
                 fql_value = str(filter_args.value).lower()
             elif filter_args.value is None:
-                fql_value = 'null'
+                fql_value = "null"
             else:
                 fql_value = str(filter_args.value)
 
-            fql_string = f'{filter_args.fql}: {operator_symbol}{fql_value}'
+            fql_string = f"{filter_args.fql}: {operator_symbol}{fql_value}"
             fql_strings.append(fql_string)
 
-        return '+'.join(fql_strings)
+        return "+".join(fql_strings)
 
     def __str__(self) -> str:
         """Return an FQL string representation of the FQLGenerator object's contents."""

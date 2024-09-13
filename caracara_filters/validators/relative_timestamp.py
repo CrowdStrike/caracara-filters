@@ -2,6 +2,7 @@
 
 This file contains a regex validator to ensure that the input matches spec.
 """
+
 from caracara_filters.common import RELATIVE_TIMESTAMP_RE
 
 
