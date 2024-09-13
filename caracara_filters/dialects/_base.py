@@ -3,14 +3,14 @@
 This file contains a base set of 'common' FQL parameters that may be used across multiple
 dialects.
 """
-
 from functools import partial
 from typing import Any, Dict
 
 from caracara_filters.common import PLATFORMS
 from caracara_filters.dialects._merge import rebase_filters_on_default
 from caracara_filters.transforms import identity_transform
-from caracara_filters.validators import identity_validator, options_validator
+from caracara_filters.validators import identity_validator
+from caracara_filters.validators import options_validator
 
 default_filter = {
     "data_type": str,
@@ -19,7 +19,7 @@ default_filter = {
     "nullable": False,
     "transform": identity_transform,
     "validator": identity_validator,
-    "valid_operators": ["EQUAL"],
+    "valid_operators": ['EQUAL'],
 }
 
 name_filter = {
