@@ -1,4 +1,4 @@
-name: Caracara Filters Code Quality
+name: Caracara Filters Code Quality and Test Coverage
 on:
   push:
     paths:
@@ -18,7 +18,7 @@ jobs:
         python-version: ["3.8", "3.9", "3.10", "3.11", "3.12", "3.13.0-rc.2"]
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Install Poetry via pipx
       run: pipx install poetry
 
@@ -49,3 +49,10 @@ jobs:
     - name: Lint package with black
       if: success() || failure()
       run: poetry run black -l 100 --check caracara_filters/
+
+    - name: Run pytest via Coverage
+      if: success() || failure()
+      run: poetry run coverage run --source=caracara_filters -m pytest -s
+
+    - name: Get Coverage Report
+      run: poetry run coverage report
