@@ -200,7 +200,7 @@ HOSTS_FILTERS: Dict[str, Dict[str, Any]] = {
     "deviceid": hosts_device_id_filter,
     "device_id": hosts_device_id_filter,  # pythonic
     "domain": hosts_domain_filter,
-    "external": hosts_external_ip_address_filter,
+    "externalip": hosts_external_ip_address_filter,
     "external_ip": hosts_external_ip_address_filter,  # pythonic
     "firstseen": hosts_first_seen_filter,
     "first_seen": hosts_first_seen_filter,  # pythonic
