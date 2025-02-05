@@ -17,8 +17,7 @@ __all__ = [
     "rebase_filters_on_default",
 ]
 
-from caracara_filters.dialects._base import BASE_FILTERS
-from caracara_filters.dialects._base import default_filter
+from caracara_filters.dialects._base import BASE_FILTERS, default_filter
 from caracara_filters.dialects._merge import rebase_filters_on_default
 from caracara_filters.dialects.hosts import HOSTS_FILTERS
 from caracara_filters.dialects.iocs import IOCS_FILTERS
