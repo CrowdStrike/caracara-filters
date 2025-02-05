@@ -12,8 +12,18 @@ from caracara_filters.transforms import relative_timestamp_transform
 from caracara_filters.validators import boolean_validator, options_validator, relative_timestamp_validator
 
 
+IOCS_ACTIONS = [
+    "no_action",
+    "allow",
+    "prevent",
+    "detect",
+    "prevent_no_ui",
+]
+
 iocs_action_filter = {
     "fql": "action",
+    "validator": partial(options_validator, IOCS_ACTIONS, case_sensitive=False),
+    "transform": lambda action: action.lower(),
     "help": "Filter by IOC action."
 }
 
