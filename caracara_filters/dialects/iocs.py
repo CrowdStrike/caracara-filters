@@ -11,6 +11,17 @@ from caracara_filters.dialects._base import rebase_filters_on_default
 from caracara_filters.transforms import relative_timestamp_transform
 from caracara_filters.validators import boolean_validator, options_validator, relative_timestamp_validator
 
+iocs_applied_globally_filter = {
+    "fql": "applied_globally",
+    "data_type": Union[bool, str],
+    "validator": boolean_validator,
+    "help": "Filter by whether the IOC is applied globally."
+}
+
+iocs_id_filter = {
+    "fql": "id",
+    "help": "Filter by IOC ID."
+}
 
 IOCS_ACTIONS = [
     "no_action",
@@ -25,6 +36,53 @@ iocs_action_filter = {
     "validator": partial(options_validator, IOCS_ACTIONS, case_sensitive=False),
     "transform": lambda action: action.lower(),
     "help": "Filter by IOC action."
+}
+
+iocs_modified_on_filter = {
+    "fql": "modified_on",
+    "multivariate": False,
+    "operator": "GTE",
+    "valid_operators": [
+        "EQUAL",
+        "GT",
+        "GTE",
+        "LT",
+        "LTE",
+    ],
+    "transform": relative_timestamp_transform,
+    "validator": relative_timestamp_validator,
+    "help": (
+        "This filter accepts two types of parameter: a fixed ISO 8601 timestamp (such as "
+        "2020-01-01:01:00:00Z), or a relative timestamp such as -30m. -30m means time now, "
+        "minus thirty minutes. An example is modified_on=-30d"
+        "to stipulate all IOCs that were modified within the last 30 days."
+    ),
+}
+
+iocs_modified_by_filter = {
+    "fql": "created_by",
+    "help": "Filter by author of last IOC modification."
+}
+
+iocs_created_on_filter = {
+    "fql": "created_on",
+    "multivariate": False,
+    "operator": "GTE",
+    "valid_operators": [
+        "EQUAL",
+        "GT",
+        "GTE",
+        "LT",
+        "LTE",
+    ],
+    "transform": relative_timestamp_transform,
+    "validator": relative_timestamp_validator,
+    "help": (
+        "This filter accepts two types of parameter: a fixed ISO 8601 timestamp (such as "
+        "2020-01-01:01:00:00Z), or a relative timestamp such as -30m. -30m means time now, "
+        "minus thirty minutes. An example is created_on=-30d"
+        "to stipulate all IOCs that were created within the last 30 days."
+    ),
 }
 
 iocs_created_by_filter = {
@@ -60,11 +118,25 @@ iocs_expired_filter = {
     "help": "Filter by expiration status of IOCs."
 }
 
+iocs_from_parent_filter = {
+    "fql": "from_parent",
+    "data_type": Union[bool, str],
+    "validator": boolean_validator,
+    "help": "Filter by whether the IOC is from parent CID."
+}
+
 iocs_platform_filter = {
     "fql": "platforms",
     "validator": partial(options_validator, PLATFORMS, case_sensitive=False),
     "transform": lambda platform: platform.lower(),  # The IOC API only matches platform names in lower case.
     "help": "Filter by the platforms this IOC applies to."
+}
+
+iocs_mobile_action_filter = {
+    "fql": "id",
+    "validator": partial(options_validator, IOCS_ACTIONS, case_sensitive=False),
+    "transform": lambda action: action.lower(),
+    "help": "Filter by mobile action"
 }
 
 IOCS_SEVERITIES = [
@@ -108,12 +180,19 @@ iocs_value_filter = {
 }
 
 IOCS_FILTERS: Dict[str, Dict[str, Any]] = {
+    "id": iocs_id_filter,
     "action": iocs_action_filter,
+    "created_on": iocs_created_on_filter,
     "created_by": iocs_created_by_filter,
-    "createdby": iocs_created_by_filter,
+    "modified_on": iocs_modified_on_filter,
+    "modified_by": iocs_modified_by_filter,
     "expiration": iocs_expiration_filter,
+    "from_parent": iocs_from_parent_filter,
+    "expiration": iocs_expiration_filter,
+    "applied_globally": iocs_applied_globally_filter,
     "expired": iocs_expired_filter,
     "platform": iocs_platform_filter,
+    "mobile_action": iocs_mobile_action_filter,
     "severity": iocs_severity_filter,
     "tags": iocs_tags_filter,
     "type": iocs_type_filter,
