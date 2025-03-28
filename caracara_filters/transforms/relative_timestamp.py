@@ -13,10 +13,7 @@ Examples:
 
 import datetime
 
-from caracara_filters.common import (
-    ISO8601_TIMESTAMP_RE,
-    RELATIVE_TIMESTAMP_RE,
-)
+from caracara_filters.common import ISO8601_TIMESTAMP_RE, RELATIVE_TIMESTAMP_RE
 
 
 def convert_relative_timestamp(original_timestamp: datetime, relative_timestamp: str) -> datetime:
