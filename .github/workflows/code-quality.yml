@@ -36,7 +36,7 @@ jobs:
 
     - name: Lint package source with pylint
       if: success() || failure()
-      run: poetry run pylint caracara_filters/
+      run: poetry run pylint --py-version=3.8 caracara_filters/
 
     - name: Lint package docstrings and comments with pydocstyle
       if: success() || failure()
