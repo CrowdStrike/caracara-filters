@@ -8,6 +8,7 @@ from caracara_filters.common import (
     RELATIVE_TIMESTAMP_RE,
 )
 
+
 def relative_timestamp_validator(timestamp_input: str) -> bool:
     """Check if an input matches a relative timestamp structure."""
     if RELATIVE_TIMESTAMP_RE.match(timestamp_input) is not None:
