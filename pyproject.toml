@@ -42,6 +42,11 @@ black = "^24.8.0"
 time-machine = "^2.15.0"
 backports-zoneinfo = {version = "0.2.1", python = "~3.8"}
 
+# pylint dependencies for legacy Python versions that are not auto-resolved by Poetry
+typing_extensions = {version = "^4.13", python = "<3.11"}
+dill = {version = "^0.2.0", python = "<3.11"}
+
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
