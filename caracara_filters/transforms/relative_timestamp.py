@@ -13,7 +13,10 @@ Examples:
 
 import datetime
 
-from caracara_filters.common import RELATIVE_TIMESTAMP_RE
+from caracara_filters.common import (
+    ISO8601_TIMESTAMP_RE,
+    RELATIVE_TIMESTAMP_RE,
+)
 
 
 def convert_relative_timestamp(original_timestamp: datetime, relative_timestamp: str) -> datetime:
@@ -53,6 +56,11 @@ def convert_relative_timestamp(original_timestamp: datetime, relative_timestamp:
 
 def relative_timestamp_transform(input_timestamp: str) -> str:
     """Convert a relative timestamp to an ISO8601 UTC timestamp for Falcon."""
+    # We first check if this is already an ISO8601 timestamp. If so, we can return it straight back.
+    iso8601_match = ISO8601_TIMESTAMP_RE.match(input_timestamp)
+    if iso8601_match is not None:
+        return input_timestamp
+
     new_timestamp = convert_relative_timestamp(
         original_timestamp=datetime.datetime.now(tz=datetime.timezone.utc),
         relative_timestamp=input_timestamp,

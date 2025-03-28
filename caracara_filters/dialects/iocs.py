@@ -2,26 +2,23 @@
 
 This module contains filters that are specific to the IOC API.
 """
+
 from functools import partial
 from typing import Any, Dict, Union
 
 from caracara_filters.common import PLATFORMS
-from caracara_filters.dialects._base import default_filter
-from caracara_filters.dialects._base import rebase_filters_on_default
-from caracara_filters.transforms import relative_timestamp_transform
-from caracara_filters.validators import boolean_validator, options_validator, relative_timestamp_validator
+from caracara_filters.common.templates import RELATIVE_TIMESTAMP_FILTER_TEMPLATE
+from caracara_filters.dialects._base import default_filter, rebase_filters_on_default
+from caracara_filters.validators import boolean_validator, options_validator
 
 iocs_applied_globally_filter = {
     "fql": "applied_globally",
     "data_type": Union[bool, str],
     "validator": boolean_validator,
-    "help": "Filter by whether the IOC is applied globally."
+    "help": "Filter by whether the IOC is applied globally.",
 }
 
-iocs_id_filter = {
-    "fql": "id",
-    "help": "Filter by IOC ID."
-}
+iocs_id_filter = {"fql": "id", "help": "Filter by IOC ID."}
 
 IOCS_ACTIONS = [
     "no_action",
@@ -39,18 +36,8 @@ iocs_action_filter = {
 }
 
 iocs_modified_on_filter = {
+    **RELATIVE_TIMESTAMP_FILTER_TEMPLATE,
     "fql": "modified_on",
-    "multivariate": False,
-    "operator": "GTE",
-    "valid_operators": [
-        "EQUAL",
-        "GT",
-        "GTE",
-        "LT",
-        "LTE",
-    ],
-    "transform": relative_timestamp_transform,
-    "validator": relative_timestamp_validator,
     "help": (
         "This filter accepts two types of parameter: a fixed ISO 8601 timestamp (such as "
         "2020-01-01:01:00:00Z), or a relative timestamp such as -30m. -30m means time now, "
@@ -60,23 +47,13 @@ iocs_modified_on_filter = {
 }
 
 iocs_modified_by_filter = {
-    "fql": "created_by",
+    "fql": "modified_by",
     "help": "Filter by author of last IOC modification.",
 }
 
 iocs_created_on_filter = {
+    **RELATIVE_TIMESTAMP_FILTER_TEMPLATE,
     "fql": "created_on",
-    "multivariate": False,
-    "operator": "GTE",
-    "valid_operators": [
-        "EQUAL",
-        "GT",
-        "GTE",
-        "LT",
-        "LTE",
-    ],
-    "transform": relative_timestamp_transform,
-    "validator": relative_timestamp_validator,
     "help": (
         "This filter accepts two types of parameter: a fixed ISO 8601 timestamp (such as "
         "2020-01-01:01:00:00Z), or a relative timestamp such as -30m. -30m means time now, "
@@ -91,18 +68,8 @@ iocs_created_by_filter = {
 }
 
 iocs_expiration_filter = {
+    **RELATIVE_TIMESTAMP_FILTER_TEMPLATE,
     "fql": "expiration",
-    "multivariate": False,
-    "operator": "GTE",
-    "valid_operators": [
-        "EQUAL",
-        "GT",
-        "GTE",
-        "LT",
-        "LTE",
-    ],
-    "transform": relative_timestamp_transform,
-    "validator": relative_timestamp_validator,
     "help": (
         "This filter accepts two types of parameter: a fixed ISO 8601 timestamp (such as "
         "2020-01-01:01:00:00Z), or a relative timestamp such as -30m. -30m means time now, "
@@ -128,12 +95,12 @@ iocs_from_parent_filter = {
 iocs_platform_filter = {
     "fql": "platforms",
     "validator": partial(options_validator, PLATFORMS, case_sensitive=False),
-    "transform": lambda platform: platform.lower(),  # The IOC API only matches platform names in lower case.
+    "transform": lambda platform: platform.lower(),  # Platforms in the IOC API are lower case
     "help": "Filter by the platforms this IOC applies to.",
 }
 
 iocs_mobile_action_filter = {
-    "fql": "id",
+    "fql": "mobile_action",
     "validator": partial(options_validator, IOCS_ACTIONS, case_sensitive=False),
     "transform": lambda action: action.lower(),
     "help": "Filter by mobile action",
@@ -180,19 +147,19 @@ iocs_value_filter = {
 }
 
 IOCS_FILTERS: Dict[str, Dict[str, Any]] = {
-    "id": iocs_id_filter,
     "action": iocs_action_filter,
-    "created_on": iocs_created_on_filter,
+    "applied_globally": iocs_applied_globally_filter,
     "created_by": iocs_created_by_filter,
+    "created_on": iocs_created_on_filter,
+    "expiration": iocs_expiration_filter,
+    "expired": iocs_expired_filter,
+    "from_parent": iocs_from_parent_filter,
+    "id": iocs_id_filter,
+    "mobile_action": iocs_mobile_action_filter,
     "modified_on": iocs_modified_on_filter,
     "modified_by": iocs_modified_by_filter,
-    "expiration": iocs_expiration_filter,
-    "from_parent": iocs_from_parent_filter,
-    "expiration": iocs_expiration_filter,
-    "applied_globally": iocs_applied_globally_filter,
-    "expired": iocs_expired_filter,
-    "platform": iocs_platform_filter,
-    "mobile_action": iocs_mobile_action_filter,
+    "platform": iocs_platform_filter,  # Alias for ease of use
+    "platforms": iocs_platform_filter,
     "severity": iocs_severity_filter,
     "tags": iocs_tags_filter,
     "type": iocs_type_filter,
