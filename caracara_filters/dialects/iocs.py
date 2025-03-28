@@ -61,7 +61,7 @@ iocs_modified_on_filter = {
 
 iocs_modified_by_filter = {
     "fql": "created_by",
-    "help": "Filter by author of last IOC modification."
+    "help": "Filter by author of last IOC modification.",
 }
 
 iocs_created_on_filter = {
@@ -87,7 +87,7 @@ iocs_created_on_filter = {
 
 iocs_created_by_filter = {
     "fql": "created_by",
-    "help": "Filter by IOC author."
+    "help": "Filter by IOC author.",
 }
 
 iocs_expiration_filter = {
@@ -115,28 +115,28 @@ iocs_expired_filter = {
     "fql": "expired",
     "data_type": Union[bool, str],
     "validator": boolean_validator,
-    "help": "Filter by expiration status of IOCs."
+    "help": "Filter by expiration status of IOCs.",
 }
 
 iocs_from_parent_filter = {
     "fql": "from_parent",
     "data_type": Union[bool, str],
     "validator": boolean_validator,
-    "help": "Filter by whether the IOC is from parent CID."
+    "help": "Filter by whether the IOC is from parent CID.",
 }
 
 iocs_platform_filter = {
     "fql": "platforms",
     "validator": partial(options_validator, PLATFORMS, case_sensitive=False),
     "transform": lambda platform: platform.lower(),  # The IOC API only matches platform names in lower case.
-    "help": "Filter by the platforms this IOC applies to."
+    "help": "Filter by the platforms this IOC applies to.",
 }
 
 iocs_mobile_action_filter = {
     "fql": "id",
     "validator": partial(options_validator, IOCS_ACTIONS, case_sensitive=False),
     "transform": lambda action: action.lower(),
-    "help": "Filter by mobile action"
+    "help": "Filter by mobile action",
 }
 
 IOCS_SEVERITIES = [
@@ -144,7 +144,7 @@ IOCS_SEVERITIES = [
     "high",
     "medium",
     "low",
-    "informational"
+    "informational",
 ]
 
 iocs_severity_filter = {
@@ -155,7 +155,7 @@ iocs_severity_filter = {
 
 iocs_tags_filter = {
     "fql": "tags",
-    "help": "Filter by IOC tags."
+    "help": "Filter by IOC tags.",
 }
 
 IOCS_TYPES = [
@@ -176,7 +176,7 @@ iocs_type_filter = {
 
 iocs_value_filter = {
     "fql": "value",
-    "help": "Filter by IOC value (e.g. domain, hash or IP address)"
+    "help": "Filter by IOC value (e.g. domain, hash or IP address)",
 }
 
 IOCS_FILTERS: Dict[str, Dict[str, Any]] = {
