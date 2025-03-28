@@ -35,7 +35,7 @@ iocs_action_filter = {
     "fql": "action",
     "validator": partial(options_validator, IOCS_ACTIONS, case_sensitive=False),
     "transform": lambda action: action.lower(),
-    "help": "Filter by IOC action."
+    "help": "Filter by IOC action.",
 }
 
 iocs_modified_on_filter = {
