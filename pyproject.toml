@@ -41,6 +41,7 @@ isort = "^5.13.2"
 black = "^24.8.0"
 time-machine = "^2.15.0"
 backports-zoneinfo = {version = "0.2.1", python = "~3.8"}
+typing_extensions = {version = "^4.13", python = "<3.11" }
 
 [build-system]
 requires = ["poetry-core"]
