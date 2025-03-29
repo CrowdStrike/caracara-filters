@@ -6,9 +6,9 @@ This module contains filters that are specific to the Hosts API.
 from functools import partial
 from typing import Any, Dict
 
+from caracara_filters.common.templates import RELATIVE_TIMESTAMP_FILTER_TEMPLATE
 from caracara_filters.dialects._base import default_filter, rebase_filters_on_default
-from caracara_filters.transforms import relative_timestamp_transform
-from caracara_filters.validators import options_validator, relative_timestamp_validator
+from caracara_filters.validators import options_validator
 
 _containment_value_map = {
     "Contained": "contained",
@@ -71,18 +71,8 @@ hosts_external_ip_address_filter = {
 }
 
 hosts_first_seen_filter = {
+    **RELATIVE_TIMESTAMP_FILTER_TEMPLATE,
     "fql": "first_seen",
-    "multivariate": False,
-    "operator": "GTE",
-    "valid_operators": [
-        "EQUAL",
-        "GT",
-        "GTE",
-        "LT",
-        "LTE",
-    ],
-    "transform": relative_timestamp_transform,
-    "validator": relative_timestamp_validator,
     "help": (
         "This filter accepts two types of parameter: a fixed ISO 8601 timestamp (such as "
         "2020-01-01:01:00:00Z), or a relative timestamp such as -30m. -30m means time now, "
@@ -113,18 +103,8 @@ hosts_hostname_filter = {
 }
 
 hosts_last_seen_filter = {
+    **RELATIVE_TIMESTAMP_FILTER_TEMPLATE,
     "fql": "last_seen",
-    "multivariate": False,
-    "operator": "GTE",
-    "valid_operators": [
-        "EQUAL",
-        "GT",
-        "GTE",
-        "LT",
-        "LTE",
-    ],
-    "transform": relative_timestamp_transform,
-    "validator": relative_timestamp_validator,
     "help": (
         "This filter accepts two types of parameter: a fixed ISO 8601 timestamp (such as "
         "2020-01-01:01:00:00Z), or a relative timestamp such as -30m. -30m means time now, "
