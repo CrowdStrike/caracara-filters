@@ -9,7 +9,7 @@ from typing import Union
 def boolean_validator(boolean_input: Union[bool, str]):
     """Validate if a filter value is a boolean."""
     # If the object is a Python boolean, this is always true
-    if isinstance(boolean_input, bool):
+    if boolean_input in [True, False]:
         return True
 
     # If the input is a string but evaluates to true or false, we can treat it as a boolean
