@@ -2,7 +2,6 @@
 
 This module contains filters that are specific to the IOC API.
 """
-from __future__ import annotations 
 
 from functools import partial
 from typing import Any, Dict, Union
