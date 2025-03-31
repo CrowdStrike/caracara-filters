@@ -63,15 +63,22 @@ class FQLGenerator:
         value: Any,
     ) -> None:
         """Validate the data type of a filter's input, based on the filter definition."""
-        data_type: Type = filter_def["data_type"]
+        data_types: List[Type] = filter_def["data_types"]
         multivariate: bool = filter_def["multivariate"]
         nullable: bool = filter_def["nullable"]
 
         if isinstance(value, list):
-            if multivariate is True and value and not isinstance(value[0], data_type):
+            if (
+                multivariate is True
+                and value
+                and not any(isinstance(value[0], x) for x in data_types)
+            ):
                 raise TypeError(
-                    f"You provided a list for {filter_name}, but the type of the first item was "
-                    f"{str(type(value))}, which is not a {str(type(data_type))}."
+                    "You provided a list for %s, but the type of the first item (%s) was not in "
+                    "the list of acceptable types (%s)",
+                    filter_name,
+                    str(type(value)),
+                    ", ".join(str(type(x)) for x in data_types),
                 )
             if multivariate is False:
                 raise TypeError(
@@ -85,10 +92,12 @@ class FQLGenerator:
             # This is okay
             pass
         else:
-            if not isinstance(value, data_type):
+            if not any(isinstance(value, x) for x in data_types):
                 raise TypeError(
-                    f"The filter {filter_name} expects a {data_type.__name__} type, but you "
-                    f"provided an initial value of type {str(type(value))}."
+                    "The type of the filter %s (%s) was not in the list of acceptable types (%s)",
+                    filter_name,
+                    str(type(value)),
+                    ", ".join(str(type(x)) for x in data_types),
                 )
 
     def _validate_and_transform(

@@ -13,7 +13,7 @@ from caracara_filters.transforms import identity_transform
 from caracara_filters.validators import identity_validator, options_validator
 
 default_filter = {
-    "data_type": str,
+    "data_types": [str],
     "operator": "EQUAL",
     "multivariate": True,
     "nullable": False,

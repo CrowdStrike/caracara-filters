@@ -8,7 +8,8 @@ from typing import Any, Dict
 
 from caracara_filters.common.templates import RELATIVE_TIMESTAMP_FILTER_TEMPLATE
 from caracara_filters.dialects._base import default_filter, rebase_filters_on_default
-from caracara_filters.validators import options_validator
+from caracara_filters.transforms import yes_no_transform
+from caracara_filters.validators import boolean_validator, options_validator
 
 _containment_value_map = {
     "Contained": "contained",
@@ -140,6 +141,17 @@ hosts_os_version_filter = {
     ),
 }
 
+hosts_reduced_functionality_mode_filter = {
+    "fql": "reduced_functionality_mode",
+    "data_types": [str, bool],
+    "transform": yes_no_transform,
+    "validator": partial(boolean_validator, accept_yes_no=True),
+    "help": (
+        "This filter with choose whether to return only hosts are in reducted functionality mode "
+        "(RFM), or not in RFM. The value sent to the cloud should be yes or no, but this filter "
+        "will appropriately transform a boolean True / False input."
+    ),
+}
 
 hosts_role_filter = {
     "fql": "product_type_desc",
@@ -195,6 +207,8 @@ HOSTS_FILTERS: Dict[str, Dict[str, Any]] = {
     "mac_address": hosts_mac_address_filter,  # pythonic
     "osversion": hosts_os_version_filter,
     "os_version": hosts_os_version_filter,  # pythonic
+    "reduced_functionality_mode": hosts_reduced_functionality_mode_filter,
+    "rfm": hosts_reduced_functionality_mode_filter,  # Commonly used shorthand
     "role": hosts_role_filter,
     "site": hosts_site_filter,
     "tag": hosts_tag_filter,
