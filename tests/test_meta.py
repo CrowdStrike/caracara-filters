@@ -36,12 +36,16 @@ def test_bad_data_type():
         fql_generator.create_new_filter("name", 123)
 
 
+# Disable the TODO check
+# pylint: disable=W0511
 def test_nullable_filter():
     """Test that a nullable filter accepts None correctly."""
     # TODO: write a test here once we have a nullable filter defined
     # (and validation logic to handle this)
 
 
+# Disable the TODO check
+# pylint: disable=W0511
 def test_bool_filter():
     """Test that a boolean filter properly validates and transforms."""
     # TODO: write a test once we have a boolean filter defined

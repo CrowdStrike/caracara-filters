@@ -74,11 +74,9 @@ class FQLGenerator:
                 and not any(isinstance(value[0], x) for x in data_types)
             ):
                 raise TypeError(
-                    "You provided a list for %s, but the type of the first item (%s) was not in "
-                    "the list of acceptable types (%s)",
-                    filter_name,
-                    str(type(value)),
-                    ", ".join(str(type(x)) for x in data_types),
+                    f"You provided a list for {filter_name}, but the type of the first item "
+                    f"({str(type(value))}) was not in the list of acceptable types: "
+                    + ", ".join(str(type(x)) for x in data_types)
                 )
             if multivariate is False:
                 raise TypeError(
@@ -94,10 +92,8 @@ class FQLGenerator:
         else:
             if not any(isinstance(value, x) for x in data_types):
                 raise TypeError(
-                    "The type of the filter %s (%s) was not in the list of acceptable types (%s)",
-                    filter_name,
-                    str(type(value)),
-                    ", ".join(str(type(x)) for x in data_types),
+                    f"The type of the filter {filter_name} ({str(type(value))}) was not in the "
+                    "list of acceptable types: " + ", ".join(str(type(x)) for x in data_types)
                 )
 
     def _validate_and_transform(

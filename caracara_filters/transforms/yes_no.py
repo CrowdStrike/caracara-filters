@@ -19,4 +19,4 @@ def yes_no_transform(value: Union[str, bool]) -> str:
             return "yes"
         return "no"
 
-    raise ValueError("%s is not a boolean or a string", str(value))
+    raise ValueError(f"{str(value)} is not a boolean or a string")
