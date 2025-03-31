@@ -2,6 +2,7 @@
 
 This module contains filters that are specific to the IOC API.
 """
+from __future__ import annotations 
 
 from functools import partial
 from typing import Any, Dict, Union
@@ -13,7 +14,7 @@ from caracara_filters.validators import boolean_validator, options_validator
 
 iocs_applied_globally_filter = {
     "fql": "applied_globally",
-    "data_type": Union[bool, str],
+    "data_type": str,
     "validator": boolean_validator,
     "help": "Filter by whether the IOC is applied globally.",
 }
@@ -80,14 +81,14 @@ iocs_expiration_filter = {
 
 iocs_expired_filter = {
     "fql": "expired",
-    "data_type": Union[bool, str],
+    "data_type": str,
     "validator": boolean_validator,
     "help": "Filter by expiration status of IOCs.",
 }
 
 iocs_from_parent_filter = {
     "fql": "from_parent",
-    "data_type": Union[bool, str],
+    "data_type": str,
     "validator": boolean_validator,
     "help": "Filter by whether the IOC is from parent CID.",
 }

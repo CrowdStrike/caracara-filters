@@ -30,7 +30,7 @@ def test_invalid_action():
 # Applied Globally
 def test_applied_globally():
     fql_generator = FQLGenerator(dialect="iocs")
-    fql_generator.create_new_filter("applied_globally", True)
+    fql_generator.create_new_filter("applied_globally", "true")
     fql = fql_generator.get_fql()
     assert fql == "applied_globally: true"
 
@@ -85,7 +85,7 @@ def test_relative_ioc_expiration_static_time_equal():
 # Expired
 def test_expired_bool_false():
     fql_generator = FQLGenerator(dialect="iocs")
-    fql_generator.create_new_filter("expired", False)
+    fql_generator.create_new_filter("expired", "false")
     fql = fql_generator.get_fql()
     assert fql == "expired: false"
 
@@ -112,7 +112,7 @@ def test_expired_none():
 # From Parent
 def test_from_parent_bool_true():
     fql_generator = FQLGenerator(dialect="iocs")
-    fql_generator.create_new_filter("from_parent", True)
+    fql_generator.create_new_filter("from_parent", "true")
     fql = fql_generator.get_fql()
     assert fql == "from_parent: true"
 
@@ -279,7 +279,7 @@ def test_ioc_value():
 def test_ioc_multi_1():
     fql_generator = FQLGenerator(dialect="iocs")
     fql_generator.create_new_filter("action", ["allow", "no_action"])
-    fql_generator.create_new_filter("applied_globally", True)
+    fql_generator.create_new_filter("applied_globally", "true")
     fql_generator.create_new_filter("created_by", "first.last@customer.com")
     fql_generator.create_new_filter("modified_on", "-1h", "GTE")
     fql_generator.create_new_filter("type", ["domain", "md5"])
