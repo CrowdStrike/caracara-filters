@@ -138,6 +138,56 @@ def test_relative_last_seen_default_operator_tz_offset_2():
     assert fql == "last_seen: >='2024-08-12T11:43:30Z'"
 
 
+def test_reduced_functionality_mode_bool():
+    """Test filtering for RFM with a boolean."""
+    fql_generator = FQLGenerator(dialect="hosts")
+    fql_generator.create_new_filter("reduced_functionality_mode", True)
+    fql = fql_generator.get_fql()
+    assert fql == "reduced_functionality_mode: 'yes'"
+
+
+def test_reduced_functionality_mode_bool_str():
+    """Test filtering for RFM with a string representation of a boolean and the RFM alias."""
+    fql_generator = FQLGenerator(dialect="hosts")
+    fql_generator.create_new_filter("rfm", "TRUE")
+    fql = fql_generator.get_fql()
+    assert fql == "reduced_functionality_mode: 'yes'"
+
+
+def test_reduced_functionality_mode_bool_no():
+    """Test filtering for RFM using the value "no" and the RFM alias."""
+    fql_generator = FQLGenerator(dialect="hosts")
+    fql_generator.create_new_filter("rfm", "no")
+    fql = fql_generator.get_fql()
+    assert fql == "reduced_functionality_mode: 'no'"
+
+
+def test_reduced_functionality_mode_invalid_values():
+    """Test filtering for RFM using bad values"."""
+    fql_generator = FQLGenerator(dialect="hosts")
+    with pytest.raises(ValueError):
+        fql_generator.create_new_filter("rfm", "invalid-rfm-value")
+
+    with pytest.raises(ValueError):
+        fql_generator.create_new_filter("rfm", "nope")
+
+    with pytest.raises(ValueError):
+        fql_generator.create_new_filter("rfm", "NOO")
+
+
+def test_reduced_functionality_mode_invalid_types():
+    """Test filtering for RFM using bad types"."""
+    fql_generator = FQLGenerator(dialect="hosts")
+    with pytest.raises(TypeError):
+        fql_generator.create_new_filter("reduced_functionality_mode", 0)
+
+    with pytest.raises(TypeError):
+        fql_generator.create_new_filter("reduced_functionality_mode", 1)
+
+    with pytest.raises(TypeError):
+        fql_generator.create_new_filter("reduced_functionality_mode", 13)
+
+
 def test_invalid_os_option():
     """Test filtering with an invalid platform name."""
     fql_generator = FQLGenerator()

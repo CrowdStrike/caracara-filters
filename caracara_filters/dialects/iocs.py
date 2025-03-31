@@ -13,7 +13,7 @@ from caracara_filters.validators import boolean_validator, options_validator
 
 iocs_applied_globally_filter = {
     "fql": "applied_globally",
-    "data_type": str,
+    "data_types": [str, bool],
     "validator": boolean_validator,
     "help": "Filter by whether the IOC is applied globally.",
 }
@@ -80,14 +80,14 @@ iocs_expiration_filter = {
 
 iocs_expired_filter = {
     "fql": "expired",
-    "data_type": str,
+    "data_types": [str, bool],
     "validator": boolean_validator,
     "help": "Filter by expiration status of IOCs.",
 }
 
 iocs_from_parent_filter = {
     "fql": "from_parent",
-    "data_type": str,
+    "data_types": [str, bool],
     "validator": boolean_validator,
     "help": "Filter by whether the IOC is from parent CID.",
 }
