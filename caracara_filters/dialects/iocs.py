@@ -4,7 +4,7 @@ This module contains filters that are specific to the IOC API.
 """
 
 from functools import partial
-from typing import Any, Dict, Union
+from typing import Any, Dict
 
 from caracara_filters.common import PLATFORMS
 from caracara_filters.common.templates import RELATIVE_TIMESTAMP_FILTER_TEMPLATE
