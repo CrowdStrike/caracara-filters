@@ -207,6 +207,7 @@ HOSTS_FILTERS: Dict[str, Dict[str, Any]] = {
     "mac_address": hosts_mac_address_filter,  # pythonic
     "osversion": hosts_os_version_filter,
     "os_version": hosts_os_version_filter,  # pythonic
+    "reducedfunctionalitymode": hosts_reduced_functionality_mode_filter,
     "reduced_functionality_mode": hosts_reduced_functionality_mode_filter,
     "rfm": hosts_reduced_functionality_mode_filter,  # Commonly used shorthand
     "role": hosts_role_filter,
