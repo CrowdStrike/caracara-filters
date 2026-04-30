@@ -406,18 +406,20 @@ toml = ["tomli ; python_full_version <= \"3.11.0a6\""]
 
 [[package]]
 name = "dill"
-version = "0.2.9"
-description = "serialize all of python"
+version = "0.4.0"
+description = "serialize all of Python"
 optional = false
-python-versions = ">=2.5, !=3.0.*"
+python-versions = ">=3.8"
 groups = ["dev"]
 markers = "python_version < \"3.11\""
 files = [
-    {file = "dill-0.2.9.tar.gz", hash = "sha256:f6d6046f9f9195206063dd0415dff185ad593d6ee8b0e67f12597c0f4df4986f"},
+    {file = "dill-0.4.0-py3-none-any.whl", hash = "sha256:44f54bf6412c2c8464c14e8243eb163690a9800dbe2c367330883b19c7561049"},
+    {file = "dill-0.4.0.tar.gz", hash = "sha256:0633f1d2df477324f53a895b02c901fb961bdbf65a17122586ea7019292cbcf0"},
 ]
 
 [package.extras]
 graph = ["objgraph (>=1.7.2)"]
+profile = ["gprof2dot (>=2022.7.29)"]
 
 [[package]]
 name = "dill"
@@ -1180,4 +1182,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.8.2"
-content-hash = "8d06c8e1042e001bc6b83c93857bc5949f1a60eb6352483f38b8cc87007d5572"
+content-hash = "91307ff83feea1de5d39d9aedbea40c62991db03257580035ef5be420c7e8328"
