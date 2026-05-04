@@ -12,6 +12,7 @@ __all__ = [
     "PREVENTION_POLICIES_FILTERS",
     "RESPONSE_POLICIES_FILTERS",
     "RTR_FILTERS",
+    "SENSOR_DOWNLOAD_FILTERS",
     "USERS_FILTERS",
     "default_filter",
     "rebase_filters_on_default",
@@ -24,6 +25,7 @@ from caracara_filters.dialects.iocs import IOCS_FILTERS
 from caracara_filters.dialects.prevention_policies import PREVENTION_POLICIES_FILTERS
 from caracara_filters.dialects.response_policies import RESPONSE_POLICIES_FILTERS
 from caracara_filters.dialects.rtr import RTR_FILTERS
+from caracara_filters.dialects.sensor_download import SENSOR_DOWNLOAD_FILTERS
 from caracara_filters.dialects.users import USERS_FILTERS
 
 DIALECTS = {
@@ -33,5 +35,6 @@ DIALECTS = {
     "prevention_policies": PREVENTION_POLICIES_FILTERS,
     "response_policies": RESPONSE_POLICIES_FILTERS,
     "rtr": RTR_FILTERS,
+    "sensor_download": SENSOR_DOWNLOAD_FILTERS,
     "users": USERS_FILTERS,
 }

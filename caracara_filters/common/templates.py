@@ -12,9 +12,9 @@ RELATIVE_TIMESTAMP_FILTER_TEMPLATE = {
     "operator": "GTE",
     "valid_operators": [
         "EQUAL",
-        "GT",
+        "GREATER",
         "GTE",
-        "LT",
+        "LESS",
         "LTE",
     ],
     "transform": relative_timestamp_transform,
