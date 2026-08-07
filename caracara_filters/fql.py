@@ -111,24 +111,24 @@ class FQLGenerator:
         if multivariate and isinstance(value, list):
             transformed_value = []
             for val in value:
-                # Validate the input
-                if not validation_func(val):
-                    raise ValueError(f"The input {val} is not valid for filter type {filter}.")
-
                 # Transform the input
                 transformed_val = transform_func(val)
+
+                # Validate the transformed input
+                if not validation_func(transformed_val):
+                    raise ValueError(f"The input {val} is not valid for filter type {filter}.")
 
                 # Replace the value in the list
                 transformed_value.append(transformed_val)
 
         else:
             # Non-multivariate input, so just handle the items directly
-            # Run through the validation function
-            if not validation_func(value):
-                raise ValueError(f"The input {value} is not valid for filter type {filter_name}.")
-
             # Transform the input
             transformed_value = transform_func(value)
+
+            # Run through the validation function
+            if not validation_func(transformed_value):
+                raise ValueError(f"The input {value} is not valid for filter type {filter_name}.")
 
         return transformed_value
 
