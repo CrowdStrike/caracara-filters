@@ -317,3 +317,43 @@ def test_last_seen_relative_seconds():
     fql_generator.create_new_filter("lastseen", "-63s")
     fql = fql_generator.get_fql()
     assert fql == "last_seen: >='2023-08-15T01:01:00Z'"
+
+
+def test_os_not_fql():
+    """Test filtering by OS with NOT operator."""
+    fql_generator = FQLGenerator(dialect="hosts")
+    fql_generator.create_new_filter("OS", "Windows", "NOT")
+    fql = fql_generator.get_fql()
+    assert fql == "hostname: !'Windows'"
+
+
+def test_hostname_not_fql():
+    """Test filtering by hostname with NOT operator."""
+    fql_generator = FQLGenerator(dialect="hosts")
+    fql_generator.create_new_filter("Hostname", "DESKTOP-1337", "NOT")
+    fql = fql_generator.get_fql()
+    assert fql == "hostname: !'DESKTOP-1337'"
+
+
+def test_groupid_not_fql():
+    """Test filtering by Group ID with NOT operator."""
+    fql_generator = FQLGenerator(dialect="hosts")
+    fql_generator.create_new_filter("GroupID", "0123456789abcdef", "NOT")
+    fql = fql_generator.get_fql()
+    assert fql == "groups: !'0123456789abcdef'"
+
+
+def test_tag_not_fql():
+    """Test filtering by tag with NOT operator."""
+    fql_generator = FQLGenerator(dialect="hosts")
+    fql_generator.create_new_filter("Tag", "SensorGroupingTags/Tag1", "NOT")
+    fql = fql_generator.get_fql()
+    assert fql == "tags: !'SensorGroupingTags/Tag1'"
+
+
+def test_ou_fql():
+    """Test filtering by Organisational Unit."""
+    fql_generator = FQLGenerator(dialect="hosts")
+    fql_generator.create_new_filter("ou", "Sydney")
+    fql = fql_generator.get_fql()
+    assert fql == "ou: 'Sydney'"
