@@ -33,6 +33,7 @@ name_filter = {
 platform_filter = {
     "fql": "platform_name",
     "validator": partial(options_validator, PLATFORMS),
+    "valid_operators": ["EQUAL", "NOT"],
     "help": f"Filter by host operating system (options: {str(PLATFORMS)}).",
 }
 

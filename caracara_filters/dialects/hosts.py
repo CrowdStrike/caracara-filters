@@ -173,6 +173,7 @@ hosts_site_filter = {
 
 hosts_tag_filter = {
     "fql": "tags",
+    "valid_operators": ["EQUAL", "NOT"],
     "help": (
         "This filter accepts one or more sensor tags as either one string, or as a comma "
         "delimited list of strings. For example, SensorGroupingTags/Tag1,FalconGroupingTags/Tag2 "
