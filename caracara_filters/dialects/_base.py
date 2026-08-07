@@ -9,7 +9,7 @@ from typing import Any, Dict
 
 from caracara_filters.common import PLATFORMS
 from caracara_filters.dialects._merge import rebase_filters_on_default
-from caracara_filters.transforms import identity_transform
+from caracara_filters.transforms import identity_transform, titlecase_transform
 from caracara_filters.validators import identity_validator, options_validator
 
 default_filter = {
@@ -32,6 +32,7 @@ name_filter = {
 
 platform_filter = {
     "fql": "platform_name",
+    "transform": titlecase_transform,
     "validator": partial(options_validator, PLATFORMS),
     "help": f"Filter by host operating system (options: {str(PLATFORMS)}).",
 }

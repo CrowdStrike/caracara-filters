@@ -317,3 +317,11 @@ def test_last_seen_relative_seconds():
     fql_generator.create_new_filter("lastseen", "-63s")
     fql = fql_generator.get_fql()
     assert fql == "last_seen: >='2023-08-15T01:01:00Z'"
+
+
+def test_os_mixed_case_fql():
+    """Test that the OS filter normalises mixed case input to title case."""
+    fql_generator = FQLGenerator(dialect="hosts")
+    fql_generator.create_new_filter("OS", ["Windows", "linux", "mAc"])
+    fql = fql_generator.get_fql()
+    assert fql == "platform_name: ['Windows', 'Linux', 'Mac']"
