@@ -324,7 +324,7 @@ def test_os_not_fql():
     fql_generator = FQLGenerator(dialect="hosts")
     fql_generator.create_new_filter("OS", "Windows", "NOT")
     fql = fql_generator.get_fql()
-    assert fql == "hostname: !'Windows'"
+    assert fql == "platform_name: !'Windows'"
 
 
 def test_hostname_not_fql():
