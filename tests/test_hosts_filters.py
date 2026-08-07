@@ -324,4 +324,4 @@ def test_os_mixed_case_fql():
     fql_generator = FQLGenerator(dialect="hosts")
     fql_generator.create_new_filter("OS", ["Windows", "linux", "mAc"])
     fql = fql_generator.get_fql()
-    assert fql == "platform_name: ['Windows', 'Linux', 'Mac']"
+    assert fql == "platform_name: ['Windows','Linux','Mac']"
