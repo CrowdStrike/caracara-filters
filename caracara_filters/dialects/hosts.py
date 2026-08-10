@@ -85,6 +85,7 @@ hosts_first_seen_filter = {
 
 hosts_group_id_filter = {
     "fql": "groups",
+    "valid_operators": ["EQUAL", "NOT"],
     "help": (
         "This filter accepts one or more Group IDs as either one string, or as a comma "
         "delimited list of strings. For example, 075e03f5e5c04d83b4831374e7dc01c3 would "
@@ -96,6 +97,7 @@ hosts_group_id_filter = {
 hosts_hostname_filter = {
     "fql": "hostname",
     "nullable": True,
+    "valid_operators": ["EQUAL", "NOT"],
     "help": (
         "Provide either a single hostname string, or a list of hostnames via a comma delimited "
         "string or Python list. For example, you can omit two specific hosts with "
@@ -171,6 +173,7 @@ hosts_site_filter = {
 
 hosts_tag_filter = {
     "fql": "tags",
+    "valid_operators": ["EQUAL", "NOT"],
     "help": (
         "This filter accepts one or more sensor tags as either one string, or as a comma "
         "delimited list of strings. For example, SensorGroupingTags/Tag1,FalconGroupingTags/Tag2 "
@@ -207,6 +210,7 @@ HOSTS_FILTERS: Dict[str, Dict[str, Any]] = {
     "mac_address": hosts_mac_address_filter,  # pythonic
     "osversion": hosts_os_version_filter,
     "os_version": hosts_os_version_filter,  # pythonic
+    "ou": hosts_ou_filter,
     "reducedfunctionalitymode": hosts_reduced_functionality_mode_filter,
     "reduced_functionality_mode": hosts_reduced_functionality_mode_filter,
     "rfm": hosts_reduced_functionality_mode_filter,  # Commonly used shorthand

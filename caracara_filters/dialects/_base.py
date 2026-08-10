@@ -34,6 +34,7 @@ platform_filter = {
     "fql": "platform_name",
     "transform": titlecase_transform,
     "validator": partial(options_validator, PLATFORMS, case_sensitive=False),
+    "valid_operators": ["EQUAL", "NOT"],
     "help": f"Filter by host operating system (options: {str(PLATFORMS)}).",
 }
 
