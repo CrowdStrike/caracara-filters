@@ -6,12 +6,12 @@ is case-sensitive but user input may vary in capitalisation (e.g. ``windows``).
 """
 
 from typing import Union
+
 from caracara_filters.common import PLATFORMS
 
 
 def platform_name_transform(value: Union[str, list]) -> Union[str, list]:
-    """Return the platform name expected by Falcon; non-string values and
-    unsupported platforms are returned unchanged."""
+    """Return the platform name expected by Falcon or the original value if unsupported"""
     if isinstance(value, str):
         for platform in PLATFORMS:
             if value.lower() == platform.lower():
