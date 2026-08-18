@@ -9,14 +9,14 @@ __all__ = [
     "bool_transform",
     "identity_transform",
     "lowercase_transform",
+    "platform_name_transform",
     "relative_timestamp_transform",
-    "titlecase_transform",
     "yes_no_transform",
 ]
 
 from caracara_filters.transforms.bool import bool_transform
 from caracara_filters.transforms.identity import identity_transform
 from caracara_filters.transforms.lowercase import lowercase_transform
+from caracara_filters.transforms.platform_name import platform_name_transform
 from caracara_filters.transforms.relative_timestamp import relative_timestamp_transform
-from caracara_filters.transforms.titlecase import titlecase_transform
 from caracara_filters.transforms.yes_no import yes_no_transform

@@ -320,7 +320,7 @@ def test_last_seen_relative_seconds():
 
 
 def test_os_mixed_case_fql():
-    """Test that the OS filter normalises mixed case input to title case."""
+    """Test that the OS filter normalises platform names."""
     fql_generator = FQLGenerator(dialect="hosts")
     fql_generator.create_new_filter("OS", ["Windows", "linux", "mAc"])
     fql = fql_generator.get_fql()
