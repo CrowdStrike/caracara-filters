@@ -55,6 +55,7 @@ hosts_device_id_filter = {
 
 hosts_domain_filter = {
     "fql": "machine_domain",
+    "valid_operators": ["EQUAL", "NOT"],
     "help": (
         "This filter accepts an AD domain, e.g. GOODDOMAIN or gooddomain.company.com. You can "
         "also provide multiple domains as a Python list or comma delimited string"
@@ -164,6 +165,7 @@ hosts_role_filter = {
 
 hosts_site_filter = {
     "fql": "site_name",
+    "valid_operators": ["EQUAL", "NOT"],
     "help": (
         "This filter accepts one or more site names as either one string, or as a comma delimtied "
         "list of strings. For example, London,Manchster1,Manchester2 would target hosts within "
@@ -183,6 +185,7 @@ hosts_tag_filter = {
 
 hosts_ou_filter = {
     "fql": "ou",
+    "valid_operators": ["EQUAL", "NOT"],
     "help": (
         "This filter accepts an Organisational Unit (OU) name as a string. You can also comma "
         "delimit OUs for multiple matches, e.g. UKServers,USServers to target hosts within any of "

@@ -365,3 +365,27 @@ def test_ou_fql():
     fql_generator.create_new_filter("ou", "Sydney")
     fql = fql_generator.get_fql()
     assert fql == "ou: 'Sydney'"
+
+
+def test_ou_not_fql():
+    """Test filtering by Organisational Unit with NOT operator."""
+    fql_generator = FQLGenerator(dialect="hosts")
+    fql_generator.create_new_filter("ou", "Sydney", "NOT")
+    fql = fql_generator.get_fql()
+    assert fql == "ou: !'Sydney'"
+
+
+def test_site_not_fql():
+    """Test filtering by site with NOT operator."""
+    fql_generator = FQLGenerator(dialect="hosts")
+    fql_generator.create_new_filter("site", "London", "NOT")
+    fql = fql_generator.get_fql()
+    assert fql == "site_name: !'London'"
+
+
+def test_domain_not_fql():
+    """Test filtering by domain with NOT operator."""
+    fql_generator = FQLGenerator(dialect="hosts")
+    fql_generator.create_new_filter("domain", "ExcludeDomain.com", "NOT")
+    fql = fql_generator.get_fql()
+    assert fql == "machine_domain: !'ExcludeDomain.com'"
